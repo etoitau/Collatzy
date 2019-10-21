@@ -1,6 +1,6 @@
 package com.etoitau.collatzy.domain;
 
-import com.etoitau.collatzy.service.DeterminedPathNodeBuilder;
+import com.etoitau.collatzy.service.PathNodeBuilder;
 
 import java.math.BigInteger;
 import java.util.HashMap;
@@ -8,15 +8,15 @@ import java.util.List;
 import java.util.Map;
 
 public class NumberMap {
-    final CollatzConfig config;
-    Map<BigInteger, DeterminedPathNode> nodes;
+    private final CollatzConfig config;
+    private Map<BigInteger, DeterminedPathNode> nodes;
 
     public NumberMap(CollatzConfig config) {
         this.config = config;
         nodes = new HashMap<>();
     }
 
-    public boolean contains(PathNode pn) {
+    public boolean contains(DeterminedPathNode pn) {
         return nodes.containsValue(pn);
     }
 
@@ -24,17 +24,16 @@ public class NumberMap {
         return nodes.containsKey(val);
     }
 
-    public DeterminedPathNode add(PathNode toAdd) {
-        return nodes.put(toAdd.getVal(), new DeterminedPathNode(toAdd));
-    }
-
     public DeterminedPathNode add(DeterminedPathNode toAdd) {
         if (contains(toAdd)) {
-            DeterminedPathNode prev = nodes.get(toAdd.getVal());
-            DeterminedPathNodeBuilder.combineDeterminedPathNodes(prev, toAdd);
+            // if already have entry
+            DeterminedPathNode prev = nodes.get(toAdd.getValue());
+            PathNodeBuilder.combineDeterminedPathNodes(prev, toAdd);
             return prev;
+        } else if (toAdd.getResult().getResult() == ResultState.Result.LOOP){
+            return nodes.put(toAdd.getValue(), toAdd);
         } else {
-            return nodes.put(toAdd.getVal(), toAdd);
+            return null;
         }
     }
 

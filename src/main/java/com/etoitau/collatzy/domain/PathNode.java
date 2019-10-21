@@ -1,31 +1,60 @@
 package com.etoitau.collatzy.domain;
 
+
 import java.math.BigInteger;
 import java.util.Objects;
 
-public class PathNode {
-    private final BigInteger val;
-    private PathNode next;
+public class PathNode implements DeterminedPathNode {
+    private BigInteger val;
+    private DeterminedPathNode next;
+    private CollatzConfig config;
+    private ResultState result;
 
-    public PathNode(BigInteger val, PathNode next) {
+    public PathNode(BigInteger val, DeterminedPathNode next, CollatzConfig config, ResultState result) {
         this.val = val;
         this.next = next;
+        this.config = config;
+        this.result = result;
     }
 
     public PathNode(BigInteger val) {
-        this(val, null);
+        this(val, null, null, null);
     }
 
-    public BigInteger getVal() {
+
+    @Override
+    public BigInteger getValue() {
         return val;
     }
 
-    public PathNode getNext() {
+    @Override
+    public void setNext(DeterminedPathNode next) {
+        this.next = next;
+    }
+
+    @Override
+    public DeterminedPathNode getNext() {
         return next;
     }
 
-    public void setNext(PathNode next) {
-        this.next = next;
+    @Override
+    public void setResult(ResultState result) {
+        this.result = result;
+    }
+
+    @Override
+    public ResultState getResult() {
+        return result;
+    }
+
+    @Override
+    public void setConfig(CollatzConfig config) {
+        this.config = config;
+    }
+
+    @Override
+    public CollatzConfig getConfig() {
+        return config;
     }
 
     /**
@@ -37,7 +66,7 @@ public class PathNode {
         if (o == null) return false;
         if (o.getClass().isAssignableFrom(this.getClass())) {
             PathNode pathNode = (PathNode) o;
-            return val.equals(pathNode.val);
+            return val.equals(pathNode.getValue());
         } else {
             return false;
         }
@@ -45,6 +74,6 @@ public class PathNode {
 
     @Override
     public int hashCode() {
-        return Objects.hash(val);
+        return Objects.hash(val, config);
     }
 }
