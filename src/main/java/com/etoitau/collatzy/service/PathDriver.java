@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 public class PathDriver {
+    private CollatzConfig config;
     private CollatzCalculator calc;
     private NumberMap map;
     private Set<DeterminedPathNode> traveled;
@@ -16,59 +17,65 @@ public class PathDriver {
     private ResultState result;
 
     public PathDriver(CollatzConfig config, NumberMap map, BigInteger startNum) {
+        this.config = config;
         this.calc = new CollatzCalculator(config);
         this.map = map;
         startNewDrive(startNum);
     }
 
     public PathDriver(CollatzConfig config, NumberMap map) {
-        this(config, map, null);
+        this.config = config;
+        this.calc = new CollatzCalculator(config);
+        this.map = map;
     }
 
     public ResultState startNewDrive(BigInteger startNum) {
         // check if already known
         if (map.contains(startNum)) {
-            result = map.get(startNum).getResult();
+            ResultState rs = map.get(startNum).getResult();
+            if (rs.getResult() == ResultState.Result.LOOP)
+                result = rs;
             return result;
         }
         // initialize for drive
         result = null;
-        start = new PathNode(startNum);
+        start = new PathNodeBuilder(startNum).addConfig(config).getNode();
         current = start;
         traveled = new HashSet<>();
+        map.add(current);
         traveled.add(current);
         return null;
     }
 
     public boolean hasResult() {
-        return (result != null);
+        return (result != null && result.getResult() != null &&result.getResult() == ResultState.Result.LOOP);
     }
 
     public DeterminedPathNode next() {
         // get next node
-        current.setNext(new PathNode(calc.next(current.getValue())));
+        current.setNext(new PathNodeBuilder(calc.next(current.getValue())).addConfig(config).getNode());
         current = current.getNext();
 
         if (map.contains(current)) {
             // if in previously known territory, see if we know result
             ResultState prevResult = map.get(current.getValue()).getResult();
-            if (prevResult.getResult() == ResultState.Result.LOOP) {
+            if (prevResult != null && prevResult.getResult() == ResultState.Result.LOOP) {
                 result = prevResult;
+                return current;
             }
-        } else if (traveled.contains(current)) {
+        }
+        if (traveled.contains(current)) {
             // if we've been here before on this drive, then we're in a loop
             result = new ResultState(ResultState.Result.LOOP);
-            List<DeterminedPathNode> loop = new ArrayList<>();
-            loop.add(current);
-            current = current.getNext();
-            while (!loop.contains(current)) {
-                loop.add(current);
-                current = current.getNext();
-            }
-            result.addLoop(loop);
+            // this combines this version with updated result with past version that has next
+            map.add(current);
+            // give it to result and it will detect and save the loop
+            result.addLoop(current);
+            // save drive to update result in everything we've visited
             saveDrive();
         }
         map.add(current);
+        traveled.add(current);
         return current;
     }
 

@@ -18,7 +18,7 @@ public class PathNode implements DeterminedPathNode {
     }
 
     public PathNode(BigInteger val) {
-        this(val, null, null, null);
+        this(val, null, new CollatzConfig(), new ResultState(ResultState.Result.OPEN));
     }
 
 
@@ -74,6 +74,6 @@ public class PathNode implements DeterminedPathNode {
 
     @Override
     public int hashCode() {
-        return Objects.hash(val, config);
+        return val.hashCode() + config.hashCode();
     }
 }

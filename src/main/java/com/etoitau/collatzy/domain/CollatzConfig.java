@@ -11,6 +11,10 @@ public class CollatzConfig {
         this.p = p;
     }
 
+    public CollatzConfig() {
+        this(2, 3, 1);
+    }
+
     public int getD() {
         return d;
     }

@@ -4,12 +4,11 @@ import com.etoitau.collatzy.domain.CollatzConfig;
 import com.etoitau.collatzy.domain.DeterminedPathNode;
 import com.etoitau.collatzy.domain.PathNode;
 import com.etoitau.collatzy.domain.ResultState;
-import sun.plugin.dom.exception.InvalidStateException;
 
 import java.math.BigInteger;
 
 public class PathNodeBuilder {
-    DeterminedPathNode node;
+    private DeterminedPathNode node;
 
     public PathNodeBuilder(BigInteger val) {
         node = new PathNode(val);
@@ -30,10 +29,14 @@ public class PathNodeBuilder {
         return this;
     }
 
-    public PathNodeBuilder combineWith(DeterminedPathNode other) throws InvalidStateException {
+    public DeterminedPathNode getNode() {
+        return node;
+    }
+
+    public PathNodeBuilder combineWith(DeterminedPathNode other) throws Exception {
 
         if (!combineDeterminedPathNodes(node, other)) {
-            throw new InvalidStateException("Nodes are not equal");
+            throw new Exception("Nodes are not equal");
         }
         return this;
     }

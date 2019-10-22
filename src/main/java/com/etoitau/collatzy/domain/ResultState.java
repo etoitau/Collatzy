@@ -14,10 +14,10 @@ public class ResultState {
 
     public ResultState(Result result) {
         this.result = result;
+        this.loopNodes = new ArrayList<>();
     }
 
     public void addLoop(DeterminedPathNode start) {
-        loopNodes = new ArrayList<>();
         loopNodes.add(start);
         DeterminedPathNode current = start;
         while(current.getNext() != start) {
@@ -44,7 +44,7 @@ public class ResultState {
                 return "unknown";
             case LOOP:
                 StringBuilder sb = new StringBuilder();
-                sb.append("stuck in the loop: ");
+                sb.append("terminates in the loop: ");
                 for (DeterminedPathNode pn: loopNodes) {
                     sb.append(pn.getValue()).append(", ");
                 }

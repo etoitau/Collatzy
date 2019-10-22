@@ -26,15 +26,11 @@ public class NumberMap {
 
     public DeterminedPathNode add(DeterminedPathNode toAdd) {
         if (contains(toAdd)) {
-            // if already have entry
+            // if already have entry, update toAdd to include all available info
             DeterminedPathNode prev = nodes.get(toAdd.getValue());
-            PathNodeBuilder.combineDeterminedPathNodes(prev, toAdd);
-            return prev;
-        } else if (toAdd.getResult().getResult() == ResultState.Result.LOOP){
-            return nodes.put(toAdd.getValue(), toAdd);
-        } else {
-            return null;
+            PathNodeBuilder.combineDeterminedPathNodes(toAdd, prev);
         }
+        return nodes.put(toAdd.getValue(), toAdd);
     }
 
     public void addAll(List<DeterminedPathNode> nodesToAdd) {
