@@ -29,14 +29,17 @@ public class PathDriver {
         this.map = map;
     }
 
-    public ResultState startNewDrive(BigInteger startNum) {
+    public DeterminedPathNode startNewDrive(BigInteger startNum) {
+
         // check if already known
         if (map.contains(startNum)) {
-            ResultState rs = map.get(startNum).getResult();
-            if (rs.getResult() == ResultState.Result.LOOP)
-                result = rs;
-            return result;
+            DeterminedPathNode found = map.get(startNum);
+            if (found.getResult().getResult() == ResultState.Result.LOOP) {
+                result = found.getResult();
+                return found;
+            }
         }
+
         // initialize for drive
         result = null;
         start = new PathNodeBuilder(startNum).addConfig(config).getNode();
@@ -44,7 +47,7 @@ public class PathDriver {
         traveled = new HashSet<>();
         map.add(current);
         traveled.add(current);
-        return null;
+        return start;
     }
 
     public boolean hasResult() {
@@ -61,6 +64,7 @@ public class PathDriver {
             ResultState prevResult = map.get(current.getValue()).getResult();
             if (prevResult != null && prevResult.getResult() == ResultState.Result.LOOP) {
                 result = prevResult;
+                saveDrive();
                 return current;
             }
         }

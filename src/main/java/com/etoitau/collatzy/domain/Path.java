@@ -26,11 +26,14 @@ public class Path implements NodePath {
         }
         if (cursor == null || loop.isEmpty()) { return; }
         DeterminedPathNode loopStart = cursor;
-        while (cursor.getNext() != loopStart) {
+
+        while (!cursor.getNext().equals(loopStart)) {
             nodeList.add(cursor);
             valueList.add(cursor.getValue());
             cursor = cursor.getNext();
         }
+        nodeList.add(cursor);
+        valueList.add(cursor.getValue());
     }
 
     @Override

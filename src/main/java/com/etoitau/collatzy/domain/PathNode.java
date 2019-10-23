@@ -21,6 +21,10 @@ public class PathNode implements DeterminedPathNode {
         this(val, null, new CollatzConfig(), new ResultState(ResultState.Result.OPEN));
     }
 
+    public PathNode(BigInteger val, CollatzConfig config) {
+        this(val, null, config, new ResultState(ResultState.Result.OPEN));
+    }
+
 
     @Override
     public BigInteger getValue() {

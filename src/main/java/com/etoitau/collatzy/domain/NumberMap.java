@@ -3,6 +3,7 @@ package com.etoitau.collatzy.domain;
 import com.etoitau.collatzy.service.PathNodeBuilder;
 
 import java.math.BigInteger;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +34,7 @@ public class NumberMap {
         return nodes.put(toAdd.getValue(), toAdd);
     }
 
-    public void addAll(List<DeterminedPathNode> nodesToAdd) {
+    public void addAll(Collection<DeterminedPathNode> nodesToAdd) {
         for (DeterminedPathNode node: nodesToAdd) {
             add(node);
         }
@@ -41,5 +42,11 @@ public class NumberMap {
 
     public DeterminedPathNode get(BigInteger val) {
         return nodes.get(val);
+    }
+
+    public CollatzConfig getConfig() { return config; }
+
+    public Collection<DeterminedPathNode> getNodes() {
+        return nodes.values();
     }
 }
