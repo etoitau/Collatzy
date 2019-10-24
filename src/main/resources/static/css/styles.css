@@ -1,0 +1,19 @@
+html, body {
+    height: 100%;
+}
+
+.greybg {
+    background-color: #dddddd;
+    background-image: url('../shattered.png');
+}
+
+.greenbg {
+    background-color: #b1f6cb;
+    background-image: url('../congruent_pentagon.png');
+}
+
+ul.blank {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}

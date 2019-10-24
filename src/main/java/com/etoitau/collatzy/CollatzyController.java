@@ -4,22 +4,34 @@ import com.etoitau.collatzy.domain.*;
 import com.etoitau.collatzy.persistence.ConfigCollection;
 import com.etoitau.collatzy.service.Helper;
 import com.etoitau.collatzy.service.PathDriver;
+import nz.net.ultraq.thymeleaf.LayoutDialect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
 
 // to run: ./mvnw package && java -jar target/collatzy-0.0.1-SNAPSHOT.jar
 
-@RestController
+@Controller
 public class CollatzyController {
     private ConfigCollection cc = new ConfigCollection();
     private Logger logger = LoggerFactory.getLogger(CollatzyController.class);
 
+    @Bean
+    public LayoutDialect layoutDialect() {
+        return new LayoutDialect();
+    }
 
+    @GetMapping("/")
+    public String index() {
+        logger.info("index called");
+        return "run_number_form";
+    }
+
+    @ResponseBody
     @RequestMapping("/path")
     public String getReportFor(@RequestParam(value="num", defaultValue="1") String numString,
                                @RequestParam(value="d", defaultValue = "2") String dStr,
