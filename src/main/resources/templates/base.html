@@ -18,35 +18,35 @@
     </head>
     <body class="greenbg">
         <div class="container-fluid h-100">
-            <div class="row justify-content-md-center">
-                <div class="col-12 col-sm-2 greybg">
+            <div class="row justify-content-md-center display-flex">
+                <div class="col-12 col-sm-2">
 <!--                    empty-->
                 </div>
                 <div class="col-12 col-sm-10">
                     <h1>COLLATZY</h1>
                 </div>
             </div>
-            <div class="row h-100">
-                <div class="col-12 col-sm-2 greybg">
-                    <ul class="blank">
-                        <li>About</li>
-                        <li>Run A Number</li>
-                        <li>Other Projects</li>
-                        <li>Source Code</li>
-                    </ul>
+            <div class="row display-flex">
+                <div class="col-12 col-sm-2">
+                    <div class="card greybg px-1 py-2 my-1">
+                        <ul class="blank">
+                            <li>About</li>
+                            <li>Run A Number</li>
+                            <li>Other Projects</li>
+                            <li>Source Code</li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="col-12 col-sm-10 h-100">
+                <div class="col-12 col-sm-10">
                     <section layout:fragment="custom-content-top">
-<!--                        Top Content goes here-->
+                        <!--                        Top Content goes here-->
                     </section>
                     <section layout:fragment="custom-content-bottom">
-<!--                        More content here-->
+                        <!--                        More content here-->
                     </section>
                 </div>
             </div>
 
-<!--    sample text block
-        <p th:text="'Hello, ' + ${name} + '!'" />-->
 
         </div>
 

@@ -41,10 +41,10 @@ public class ResultState {
     public String toStringVerbose() {
         switch (result) {
             case OPEN:
-                return "unknown";
+                return "Unknown";
             case LOOP:
                 StringBuilder sb = new StringBuilder();
-                sb.append("terminates in the loop: ");
+                sb.append("Terminates in the loop: ");
                 for (DeterminedPathNode pn: loopNodes) {
                     sb.append(pn.getValue()).append(", ");
                 }

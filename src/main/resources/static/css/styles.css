@@ -17,3 +17,19 @@ ul.blank {
     padding: 0;
     margin: 0;
 }
+
+input.field-small {
+    width: 4em;
+}
+
+.row.display-flex {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.row.display-flex > [class*='col-'] {
+  display: flex;
+  flex-direction: column;
+}
+
+
