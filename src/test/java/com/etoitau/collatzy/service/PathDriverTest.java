@@ -1,10 +1,9 @@
 package com.etoitau.collatzy.service;
 
 import com.etoitau.collatzy.domain.CollatzConfig;
-import com.etoitau.collatzy.domain.DeterminedPathNode;
+import com.etoitau.collatzy.domain.NodeWithResult;
 import com.etoitau.collatzy.domain.NumberMap;
 import com.etoitau.collatzy.domain.ResultState;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;
@@ -21,7 +20,7 @@ class PathDriverTest {
         pd.startNewDrive(new BigInteger("5"));
         BigInteger bi = new BigInteger("16");
 
-        DeterminedPathNode node = pd.next(); // 16
+        NodeWithResult node = pd.next(); // 16
         assertEquals(bi, node.getValue());
         pd.next(); // 8
         pd.next(); // 4

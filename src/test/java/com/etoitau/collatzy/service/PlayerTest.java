@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class PlayerTest {
     private static Path path;
     private static PathDriver pd;
-    private static DeterminedPathNode eightNode, oneNode;
+    private static NodeWithResult eightNode, oneNode;
     private static Player p;
 
     @BeforeAll
@@ -36,7 +36,7 @@ class PlayerTest {
     @Test
     void hasNext() {
         assertTrue(p.hasNext());
-        DeterminedPathNode cursor = null;
+        NodeWithResult cursor = null;
         while (p.hasNext()) {
             cursor = p.next();
         }

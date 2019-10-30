@@ -1,7 +1,7 @@
 package com.etoitau.collatzy.service;
 
 import com.etoitau.collatzy.domain.CollatzConfig;
-import com.etoitau.collatzy.domain.DeterminedPathNode;
+import com.etoitau.collatzy.domain.NodeWithResult;
 import com.etoitau.collatzy.domain.PathNode;
 import com.etoitau.collatzy.domain.ResultState;
 import org.junit.jupiter.api.Test;
@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class PathNodeBuilderTest {
     private static BigInteger oneVal = new BigInteger("1");
-    private static DeterminedPathNode twoNode = new PathNode(new BigInteger("4"));
+    private static NodeWithResult twoNode = new PathNode(new BigInteger("4"));
     private static CollatzConfig altConfig = new CollatzConfig(2, 2, 2);
     private static ResultState open = new ResultState(ResultState.Result.OPEN);
     private static ResultState loop = new ResultState((ResultState.Result.LOOP));
@@ -56,7 +56,7 @@ class PathNodeBuilderTest {
             gotException = true;
         }
         assertTrue(gotException);
-        DeterminedPathNode oneNodePlus = new PathNodeBuilder(oneVal).addNext(twoNode).addResult(loop).getNode();
+        NodeWithResult oneNodePlus = new PathNodeBuilder(oneVal).addNext(twoNode).addResult(loop).getNode();
 
         try {
             pnb.combineWith(oneNodePlus);
@@ -70,9 +70,9 @@ class PathNodeBuilderTest {
     @Test
     void combineDeterminedPathNodes() {
         PathNodeBuilder pnb = new PathNodeBuilder(oneVal);
-        DeterminedPathNode oneNode = pnb.getNode();
+        NodeWithResult oneNode = pnb.getNode();
         assertFalse(PathNodeBuilder.combineDeterminedPathNodes(oneNode, twoNode));
-        DeterminedPathNode oneNodePlus = new PathNodeBuilder(oneVal).addNext(twoNode).addResult(loop).getNode();
+        NodeWithResult oneNodePlus = new PathNodeBuilder(oneVal).addNext(twoNode).addResult(loop).getNode();
 
         PathNodeBuilder.combineDeterminedPathNodes(oneNode, oneNodePlus);
 

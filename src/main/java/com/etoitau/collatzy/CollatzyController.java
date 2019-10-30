@@ -2,8 +2,7 @@ package com.etoitau.collatzy;
 
 import com.etoitau.collatzy.domain.*;
 import com.etoitau.collatzy.persistence.ConfigCollection;
-import com.etoitau.collatzy.service.Helper;
-import com.etoitau.collatzy.service.PathDriver;
+import com.etoitau.collatzy.service.*;
 import nz.net.ultraq.thymeleaf.LayoutDialect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,7 +50,7 @@ public class CollatzyController {
         model.addAttribute("num", runForm.getNum());
         model.addAttribute("cont", rept.lastNum());
         model.addAttribute("hasReport", true);
-        model.addAttribute("report", rept.htmlReport());
+        model.addAttribute("report", new ReportPrinterHTML(rept).print());
         model.addAttribute("isUnknown", rept.isUnknown());
         return "run_number_form";
     }
@@ -81,7 +80,8 @@ public class CollatzyController {
         logger.info(String.format("getReportFor called with num = %s, d = %s, m = %s, p = %s, and n = %s",
                 numString, dStr, mStr, pStr, nStr));
         PathReport rept = getReportScript(numString, dStr, mStr, pStr, nStr, null);
-        return (reportType.equals("json"))? rept.jsonReport(): rept.htmlReport();
+        ReportPrinter printer = (reportType.equals("json"))? new ReportPrinterJson(rept): new ReportPrinterHTML(rept);
+        return printer.print();
     }
 
 
@@ -118,7 +118,7 @@ public class CollatzyController {
             if (pd.hasResult()) break;
             pd.next();
         }
-        DeterminedPathNode start = map.get(startNum);
+        NodeWithResult start = map.get(startNum);
         Path path = new Path(start);
         return new Report(path);
     }
@@ -133,5 +133,14 @@ public class CollatzyController {
                 DEFAULT_RUN_SIZE.toString(),
                 runForm.getCont()
         );
+    }
+
+    private void syncWithDB(CollatzConfig config) {
+        // get serialized from db for config
+        // turn into list of nodes
+        // add all to numbermap
+        // get numbermap list of nodes
+        // serialize
+        // update to db
     }
 }

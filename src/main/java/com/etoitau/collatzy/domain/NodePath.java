@@ -4,6 +4,6 @@ import java.math.BigInteger;
 import java.util.List;
 
 public interface NodePath {
-    List<DeterminedPathNode> getPath();
+    List<NodeWithResult> getPath();
     List<BigInteger> getValuePath();
 }

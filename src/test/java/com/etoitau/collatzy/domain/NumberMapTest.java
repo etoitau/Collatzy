@@ -1,11 +1,9 @@
 package com.etoitau.collatzy.domain;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -13,11 +11,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class NumberMapTest {
     static CollatzConfig config;
-    static DeterminedPathNode two;
-    static DeterminedPathNode inMap;
+    static NodeWithResult two;
+    static NodeWithResult inMap;
 
     static ResultState result;
-    static DeterminedPathNode update;
+    static NodeWithResult update;
     static NumberMap map;
 
     @BeforeEach
@@ -63,13 +61,13 @@ class NumberMapTest {
         // add version with next and result open
         map.add(inMap);
         // add update with no next but result loop, and catch old version
-        DeterminedPathNode old = map.add(update);
+        NodeWithResult old = map.add(update);
         // old version should be the one we added before, not updated
         assertEquals(old.getResult().getResult(), ResultState.Result.OPEN);
         // one we added should be updated
         assertEquals(update.getNext(), two);
         // version in map now should have next and result loop
-        DeterminedPathNode found = map.get(inMap.getValue());
+        NodeWithResult found = map.get(inMap.getValue());
         assertEquals(found.getResult().getResult(), ResultState.Result.LOOP);
         assertEquals(found.getNext(), two);
     }
@@ -77,7 +75,7 @@ class NumberMapTest {
     @Test
     void addAll() {
         // list dpn
-        List<DeterminedPathNode> nodes = Arrays.asList(inMap, two);
+        List<NodeWithResult> nodes = Arrays.asList(inMap, two);
         assertFalse(map.contains(inMap));
         map.addAll(nodes);
         assertTrue(map.contains(inMap));
@@ -87,7 +85,7 @@ class NumberMapTest {
     @Test
     void get() {
         map.add(two);
-        DeterminedPathNode found = map.get(new BigInteger("2"));
+        NodeWithResult found = map.get(new BigInteger("2"));
         assertEquals(found, two);
     }
 }

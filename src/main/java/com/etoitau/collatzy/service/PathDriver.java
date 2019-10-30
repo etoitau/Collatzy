@@ -3,7 +3,6 @@ package com.etoitau.collatzy.service;
 import com.etoitau.collatzy.domain.*;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -12,8 +11,8 @@ public class PathDriver {
     private CollatzConfig config;
     private CollatzCalculator calc;
     private NumberMap map;
-    private Set<DeterminedPathNode> traveled;
-    private DeterminedPathNode start, current;
+    private Set<NodeWithResult> traveled;
+    private NodeWithResult start, current;
     private ResultState result;
 
     public PathDriver(CollatzConfig config, NumberMap map, BigInteger startNum) {
@@ -29,11 +28,11 @@ public class PathDriver {
         this.map = map;
     }
 
-    public DeterminedPathNode startNewDrive(BigInteger startNum) {
+    public NodeWithResult startNewDrive(BigInteger startNum) {
 
         // check if already known
         if (map.contains(startNum)) {
-            DeterminedPathNode found = map.get(startNum);
+            NodeWithResult found = map.get(startNum);
             if (found.getResult().getResult() == ResultState.Result.LOOP) {
                 result = found.getResult();
                 return found;
@@ -54,7 +53,7 @@ public class PathDriver {
         return (result != null && result.getResult() != null &&result.getResult() == ResultState.Result.LOOP);
     }
 
-    public DeterminedPathNode next() {
+    public NodeWithResult next() {
         // get next node
         current.setNext(new PathNodeBuilder(calc.next(current.getValue())).addConfig(config).getNode());
         current = current.getNext();
@@ -84,15 +83,15 @@ public class PathDriver {
     }
 
     private void saveDrive() {
-        List<DeterminedPathNode> loop = result.getLoopNodes();
-        DeterminedPathNode cursor = start;
+        List<NodeWithResult> loop = result.getLoopNodes();
+        NodeWithResult cursor = start;
         cursor.setResult(result);
         while (!loop.contains(cursor)) {
             map.add(cursor);
             cursor = cursor.getNext();
             cursor.setResult(result);
         }
-        for (DeterminedPathNode node : loop) {
+        for (NodeWithResult node : loop) {
             node.setResult(result);
             map.add(node);
         }

@@ -10,7 +10,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class PathTest {
-    static DeterminedPathNode five, twelve;
+    static NodeWithResult five, twelve;
 
     @BeforeAll
     static void init() {
@@ -32,7 +32,7 @@ class PathTest {
     @Test
     void getPath() {
         NodePath path = new Path(five);
-        List<DeterminedPathNode> list = path.getPath();
+        List<NodeWithResult> list = path.getPath();
         assertEquals(five, list.get(0));
         assertEquals(6, list.size());
         assertEquals(new BigInteger("1"), list.get(list.size() - 1).getValue());

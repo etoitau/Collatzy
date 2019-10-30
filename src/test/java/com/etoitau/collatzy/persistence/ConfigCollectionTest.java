@@ -1,7 +1,7 @@
 package com.etoitau.collatzy.persistence;
 
 import com.etoitau.collatzy.domain.CollatzConfig;
-import com.etoitau.collatzy.domain.DeterminedPathNode;
+import com.etoitau.collatzy.domain.NodeWithResult;
 import com.etoitau.collatzy.domain.NumberMap;
 import com.etoitau.collatzy.domain.PathNode;
 import org.junit.jupiter.api.Test;
@@ -21,11 +21,11 @@ class ConfigCollectionTest {
         NumberMap nm = new NumberMap(config1);
         NumberMap nm2 = new NumberMap(config1);
         NumberMap nm3 = new NumberMap(config2);
-        DeterminedPathNode one1 = new PathNode(new BigInteger("1"), config1);
-        DeterminedPathNode one2 = new PathNode(new BigInteger("1"), config2);
-        DeterminedPathNode two1 = new PathNode(new BigInteger("2"), config1);
-        DeterminedPathNode two2 = new PathNode(new BigInteger("2"), config2);
-        DeterminedPathNode one1Plus = new PathNode(new BigInteger("1"), config1);
+        NodeWithResult one1 = new PathNode(new BigInteger("1"), config1);
+        NodeWithResult one2 = new PathNode(new BigInteger("1"), config2);
+        NodeWithResult two1 = new PathNode(new BigInteger("2"), config1);
+        NodeWithResult two2 = new PathNode(new BigInteger("2"), config2);
+        NodeWithResult one1Plus = new PathNode(new BigInteger("1"), config1);
         one1Plus.setNext(two1);
         nm.add(one1Plus);
         nm2.add(one1);

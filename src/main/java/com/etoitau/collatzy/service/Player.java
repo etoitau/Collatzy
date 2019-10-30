@@ -1,12 +1,12 @@
 package com.etoitau.collatzy.service;
 
-import com.etoitau.collatzy.domain.DeterminedPathNode;
+import com.etoitau.collatzy.domain.NodeWithResult;
 import com.etoitau.collatzy.domain.Path;
 
 import java.util.List;
 
 public class Player implements PathPlayer {
-    private List<DeterminedPathNode> listNodes;
+    private List<NodeWithResult> listNodes;
     private int current = -1, next = -1;
 
     public Player(Path path) {
@@ -22,7 +22,7 @@ public class Player implements PathPlayer {
     }
 
     @Override
-    public DeterminedPathNode next() {
+    public NodeWithResult next() {
         current = next;
         next++;
         return listNodes.get(current);

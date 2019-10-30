@@ -2,6 +2,12 @@ package com.etoitau.collatzy.domain;
 
 import java.util.Objects;
 
+/**
+ * Configuration of a Collatz-like problem
+ * i.e.:
+ * f(num + 1) = (num % d == 0)? n / d: num * m + p
+ * holds d, m, and p
+ */
 public class CollatzConfig {
     private final int d, m, p;
 

@@ -1,11 +1,18 @@
 package com.etoitau.collatzy.domain;
 
-public interface PathReport {
-    String jsonReport();
+import java.util.List;
 
-    String htmlReport();
+public interface PathReport {
 
     boolean isUnknown();
 
     String lastNum();
+
+    String getStartingPoint();
+
+    String getResult();
+
+    Integer getLength();
+
+    List<String> getStringValueList();
 }

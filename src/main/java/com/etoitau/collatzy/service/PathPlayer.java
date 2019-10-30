@@ -1,9 +1,9 @@
 package com.etoitau.collatzy.service;
 
-import com.etoitau.collatzy.domain.DeterminedPathNode;
+import com.etoitau.collatzy.domain.NodeWithResult;
 
 public interface PathPlayer {
     public boolean hasNext();
-    public DeterminedPathNode next();
+    public NodeWithResult next();
     public void restart();
 }

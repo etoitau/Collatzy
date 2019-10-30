@@ -5,19 +5,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Path implements NodePath {
-    private DeterminedPathNode start;
-    private List<DeterminedPathNode> nodeList;
+    private NodeWithResult start;
+    private List<NodeWithResult> nodeList;
     private List<BigInteger> valueList;
 
-    public Path(DeterminedPathNode start) {
+    public Path(NodeWithResult start) {
         this.start = start;
         nodeList = new ArrayList<>();
         valueList = new ArrayList<>();
     }
 
     private void popLists() {
-        DeterminedPathNode cursor = start;
-        List<DeterminedPathNode> loop = start.getResult().getLoopNodes();
+        NodeWithResult cursor = start;
+        List<NodeWithResult> loop = start.getResult().getLoopNodes();
 
         while (cursor != null && !loop.contains(cursor)) {
             nodeList.add(cursor);
@@ -25,7 +25,7 @@ public class Path implements NodePath {
             cursor = cursor.getNext();
         }
         if (cursor == null || loop.isEmpty()) { return; }
-        DeterminedPathNode loopStart = cursor;
+        NodeWithResult loopStart = cursor;
 
         while (!cursor.getNext().equals(loopStart)) {
             nodeList.add(cursor);
@@ -37,7 +37,7 @@ public class Path implements NodePath {
     }
 
     @Override
-    public List<DeterminedPathNode> getPath() {
+    public List<NodeWithResult> getPath() {
         if (nodeList.isEmpty()) popLists();
         return nodeList;
     }

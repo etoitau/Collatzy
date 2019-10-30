@@ -1,16 +1,14 @@
 package com.etoitau.collatzy.domain;
 
-
 import java.math.BigInteger;
-import java.util.Objects;
 
-public class PathNode implements DeterminedPathNode {
+public class PathNode implements NodeWithResult {
     private BigInteger val;
-    private DeterminedPathNode next;
+    private NodeWithResult next;
     private CollatzConfig config;
     private ResultState result;
 
-    public PathNode(BigInteger val, DeterminedPathNode next, CollatzConfig config, ResultState result) {
+    public PathNode(BigInteger val, NodeWithResult next, CollatzConfig config, ResultState result) {
         this.val = val;
         this.next = next;
         this.config = config;
@@ -25,19 +23,18 @@ public class PathNode implements DeterminedPathNode {
         this(val, null, config, new ResultState(ResultState.Result.OPEN));
     }
 
-
     @Override
     public BigInteger getValue() {
         return val;
     }
 
     @Override
-    public void setNext(DeterminedPathNode next) {
+    public void setNext(NodeWithResult next) {
         this.next = next;
     }
 
     @Override
-    public DeterminedPathNode getNext() {
+    public NodeWithResult getNext() {
         return next;
     }
 

@@ -1,20 +1,20 @@
 package com.etoitau.collatzy.service;
 
 import com.etoitau.collatzy.domain.CollatzConfig;
-import com.etoitau.collatzy.domain.DeterminedPathNode;
+import com.etoitau.collatzy.domain.NodeWithResult;
 import com.etoitau.collatzy.domain.PathNode;
 import com.etoitau.collatzy.domain.ResultState;
 
 import java.math.BigInteger;
 
 public class PathNodeBuilder {
-    private DeterminedPathNode node;
+    private NodeWithResult node;
 
     public PathNodeBuilder(BigInteger val) {
         node = new PathNode(val);
     }
 
-    public PathNodeBuilder addNext(DeterminedPathNode n) {
+    public PathNodeBuilder addNext(NodeWithResult n) {
         node.setNext(n);
         return this;
     }
@@ -29,11 +29,11 @@ public class PathNodeBuilder {
         return this;
     }
 
-    public DeterminedPathNode getNode() {
+    public NodeWithResult getNode() {
         return node;
     }
 
-    public PathNodeBuilder combineWith(DeterminedPathNode other) throws Exception {
+    public PathNodeBuilder combineWith(NodeWithResult other) throws Exception {
 
         if (!combineDeterminedPathNodes(node, other)) {
             throw new Exception("Nodes are not equal");
@@ -41,7 +41,7 @@ public class PathNodeBuilder {
         return this;
     }
 
-    public static boolean combineDeterminedPathNodes(DeterminedPathNode base, DeterminedPathNode addThis) {
+    public static boolean combineDeterminedPathNodes(NodeWithResult base, NodeWithResult addThis) {
         // value, config
         if (!base.equals(addThis)) {
             return false;

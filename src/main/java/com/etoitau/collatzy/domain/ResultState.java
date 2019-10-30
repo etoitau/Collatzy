@@ -1,6 +1,5 @@
 package com.etoitau.collatzy.domain;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,23 +9,23 @@ public class ResultState {
         LOOP,
     }
     private final Result result;
-    private List<DeterminedPathNode> loopNodes;
+    private List<NodeWithResult> loopNodes;
 
     public ResultState(Result result) {
         this.result = result;
         this.loopNodes = new ArrayList<>();
     }
 
-    public void addLoop(DeterminedPathNode start) {
+    public void addLoop(NodeWithResult start) {
         loopNodes.add(start);
-        DeterminedPathNode current = start;
+        NodeWithResult current = start;
         while(current.getNext() != start) {
             current = current.getNext();
             loopNodes.add(current);
         }
     }
 
-    public void addLoop(List<DeterminedPathNode> nodes) {
+    public void addLoop(List<NodeWithResult> nodes) {
         loopNodes = nodes;
     }
 
@@ -34,7 +33,7 @@ public class ResultState {
         return result;
     }
 
-    public List<DeterminedPathNode> getLoopNodes() {
+    public List<NodeWithResult> getLoopNodes() {
         return loopNodes;
     }
 
@@ -45,7 +44,7 @@ public class ResultState {
             case LOOP:
                 StringBuilder sb = new StringBuilder();
                 sb.append("Terminates in the loop: ");
-                for (DeterminedPathNode pn: loopNodes) {
+                for (NodeWithResult pn: loopNodes) {
                     sb.append(pn.getValue()).append(", ");
                 }
                 sb.append(loopNodes.get(0).getValue()).append("...");
