@@ -2,16 +2,20 @@ package com.etoitau.collatzy;
 
 import com.etoitau.collatzy.domain.*;
 import com.etoitau.collatzy.persistence.ConfigCollection;
+import com.etoitau.collatzy.persistence.ConfigEntry;
+import com.etoitau.collatzy.persistence.ConfigNodesRepository;
 import com.etoitau.collatzy.service.*;
 import nz.net.ultraq.thymeleaf.LayoutDialect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
+import java.util.List;
 
 // to run: ./mvnw package && java -jar target/collatzy-0.0.1-SNAPSHOT.jar
 
@@ -21,6 +25,9 @@ public class CollatzyController {
     private Logger logger = LoggerFactory.getLogger(CollatzyController.class);
 
     private static final Integer DEFAULT_RUN_SIZE = 100;
+
+    @Autowired
+    ConfigNodesRepository repository;
 
     @Bean
     public LayoutDialect layoutDialect() {
@@ -82,6 +89,24 @@ public class CollatzyController {
         PathReport rept = getReportScript(numString, dStr, mStr, pStr, nStr, null);
         ReportPrinter printer = (reportType.equals("json"))? new ReportPrinterJson(rept): new ReportPrinterHTML(rept);
         return printer.print();
+    }
+
+    @ResponseBody
+    @RequestMapping("/msg")
+    public String saveMessage(@RequestParam(value="msg", defaultValue="") String msg) {
+        logger.info(String.format("saveMessage called with message %s", msg));
+        ConfigEntry entry = new ConfigEntry(new CollatzConfig());
+        entry.setJsonNodes(msg);
+        repository.save(entry);
+        return "saved";
+    }
+
+    @ResponseBody
+    @RequestMapping("/find")
+    public String getEntry() {
+        logger.info("getEntry called");
+        List<ConfigEntry> results = repository.findAll();
+        return results.get(0).getJsonNodes();
     }
 
 
