@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface ConfigNodesRepository extends JpaRepository<ConfigEntry, Long> {
-
+    List<ConfigEntry> findByDAndMAndP(int d, int m, int p);
 }

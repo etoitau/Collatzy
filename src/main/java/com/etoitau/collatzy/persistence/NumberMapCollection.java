@@ -5,7 +5,7 @@ import com.etoitau.collatzy.domain.NumberMap;
 
 public interface NumberMapCollection {
 
-    public boolean hasMap(CollatzConfig cc);
-    public NumberMap getMap(CollatzConfig cc);
-    public NumberMapCollection addMap(NumberMap nm);
+    boolean hasMap(CollatzConfig cc);
+    NumberMap getMap(CollatzConfig cc);
+    NumberMapCollection addMap(NumberMap nm);
 }

@@ -22,7 +22,8 @@ public class ConfigEntry implements Serializable {
     @Column(name="p")
     private int p;
 
-    @Column(name="nodes")
+    @Lob
+    @Column(name="nodes", columnDefinition = "CLOB")
     private String jsonNodes;
 
     public ConfigEntry() {

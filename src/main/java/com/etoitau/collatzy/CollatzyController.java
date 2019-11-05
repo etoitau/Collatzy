@@ -4,6 +4,7 @@ import com.etoitau.collatzy.domain.*;
 import com.etoitau.collatzy.persistence.ConfigCollection;
 import com.etoitau.collatzy.persistence.ConfigEntry;
 import com.etoitau.collatzy.persistence.ConfigNodesRepository;
+import com.etoitau.collatzy.persistence.DatabaseManager;
 import com.etoitau.collatzy.service.*;
 import nz.net.ultraq.thymeleaf.LayoutDialect;
 import org.slf4j.Logger;
@@ -27,7 +28,10 @@ public class CollatzyController {
     private static final Integer DEFAULT_RUN_SIZE = 100;
 
     @Autowired
-    ConfigNodesRepository repository;
+    private ConfigNodesRepository repository;
+
+    @Autowired
+    private DatabaseManager dm;
 
     @Bean
     public LayoutDialect layoutDialect() {
@@ -93,9 +97,16 @@ public class CollatzyController {
 
     @ResponseBody
     @RequestMapping("/msg")
-    public String saveMessage(@RequestParam(value="msg", defaultValue="") String msg) {
-        logger.info(String.format("saveMessage called with message %s", msg));
-        ConfigEntry entry = new ConfigEntry(new CollatzConfig());
+    public String saveMessage(@RequestParam(value="msg", defaultValue="") String msg,
+                              @RequestParam(value="d", defaultValue = "2") String dStr,
+                              @RequestParam(value="m", defaultValue = "3") String mStr,
+                              @RequestParam(value="p", defaultValue = "1") String pStr) {
+        logger.info("msg called");
+        Integer d = Helper.parseStringToIntegerWithDefault(dStr, 2);
+        Integer m = Helper.parseStringToIntegerWithDefault(mStr, 3);
+        Integer p = Helper.parseStringToIntegerWithDefault(pStr, 1);
+        CollatzConfig config = new CollatzConfig(d, m, p);
+        ConfigEntry entry = dm.getEntry(config);
         entry.setJsonNodes(msg);
         repository.save(entry);
         return "saved";
@@ -103,10 +114,28 @@ public class CollatzyController {
 
     @ResponseBody
     @RequestMapping("/find")
-    public String getEntry() {
-        logger.info("getEntry called");
-        List<ConfigEntry> results = repository.findAll();
-        return results.get(0).getJsonNodes();
+    public String getEntry(@RequestParam(value="d", defaultValue = "2") String dStr,
+                           @RequestParam(value="m", defaultValue = "3") String mStr,
+                           @RequestParam(value="p", defaultValue = "1") String pStr) {
+        logger.info("getEntry called with " + dStr + ", " + mStr + ", " + pStr);
+        Integer d = Helper.parseStringToIntegerWithDefault(dStr, 2);
+        Integer m = Helper.parseStringToIntegerWithDefault(mStr, 3);
+        Integer p = Helper.parseStringToIntegerWithDefault(pStr, 1);
+        ConfigEntry result = dm.getEntry(new CollatzConfig(d, m, p));
+        return result.getJsonNodes();
+    }
+
+    @ResponseBody
+    @RequestMapping("/delete")
+    public String deleteEntry(@RequestParam(value="d", defaultValue = "2") String dStr,
+                           @RequestParam(value="m", defaultValue = "3") String mStr,
+                           @RequestParam(value="p", defaultValue = "1") String pStr) {
+        logger.info("deleteEntry called");
+        Integer d = Helper.parseStringToIntegerWithDefault(dStr, 2);
+        Integer m = Helper.parseStringToIntegerWithDefault(mStr, 3);
+        Integer p = Helper.parseStringToIntegerWithDefault(pStr, 1);
+        dm.delete(new CollatzConfig(d, m, p));
+        return "deleted";
     }
 
 
@@ -122,13 +151,9 @@ public class CollatzyController {
         BigInteger contNum = Helper.parseStringToBigIntegerWithDefault(continueFrom, null);
 
         CollatzConfig config = new CollatzConfig(d, m, p);
-        NumberMap map;
-        if (cc.hasMap(config)) {
-            map = cc.getMap(config);
-        } else {
-            map = new NumberMap(config);
-            cc.addMap(map);
-        }
+
+        ConfigEntry entry = dm.getEntry(config);
+        NumberMap map = dm.getMapFromEntry(entry);
 
         PathDriver pd;
         if (contNum != null) {
@@ -143,6 +168,8 @@ public class CollatzyController {
             if (pd.hasResult()) break;
             pd.next();
         }
+        dm.saveMap(map);
+
         NodeWithResult start = map.get(startNum);
         Path path = new Path(start);
         return new Report(path);
