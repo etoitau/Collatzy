@@ -1,5 +1,8 @@
 package com.etoitau.collatzy.domain;
 
+/**
+ * Object for holding information from web form
+ */
 public class RunForm {
     private String d, m, p, num, cont = null;
 

@@ -6,6 +6,11 @@ import com.etoitau.collatzy.domain.CollatzConfig;
 import javax.persistence.*;
 import java.io.Serializable;
 
+/**
+ * Database row
+ * each entry is a Collatz configuration and
+ *  all the nodes that have been explored to date for that configuration - represented as a serialized string
+ */
 @Entity
 @Table(name="configs")
 public class ConfigEntry implements Serializable {
@@ -24,27 +29,27 @@ public class ConfigEntry implements Serializable {
 
     @Lob
     @Column(name="nodes", columnDefinition = "CLOB")
-    private String jsonNodes;
+    private String serialNodes;
 
     public ConfigEntry() {
         this.d = 2;
         this.m = 3;
         this.p = 1;
-        this.jsonNodes = "";
+        this.serialNodes = "";
     }
 
     public ConfigEntry(int d, int m, int p) {
         this.d = d;
         this.m = m;
         this.p = p;
-        this.jsonNodes = "";
+        this.serialNodes = "";
     }
 
     public ConfigEntry(CollatzConfig config) {
         this.d = config.getD();
         this.m = config.getM();
         this.p = config.getP();
-        this.jsonNodes = "";
+        this.serialNodes = "";
     }
 
     public Long getId() {
@@ -79,11 +84,11 @@ public class ConfigEntry implements Serializable {
         this.p = p;
     }
 
-    public String getJsonNodes() {
-        return jsonNodes;
+    public String getSerialNodes() {
+        return serialNodes;
     }
 
-    public void setJsonNodes(String jsonNodes) {
-        this.jsonNodes = jsonNodes;
+    public void setSerialNodes(String serialNodes) {
+        this.serialNodes = serialNodes;
     }
 }

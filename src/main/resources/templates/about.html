@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{base}">
+<head>
+    <title>About</title>
+</head>
+<body>
+<section layout:fragment="custom-content-top">
+    The inspiration for this project is The Collatz Conjecture. The wonderful thing about the Collatz Conjecture is that
+    it only requires addition, multiplication, and division and anyone can understand it well enough to play with it. But
+    at the same time it's an unsolved problem in mathematics.
+
+    The idea is that you start from any positive integer (1, 2, 3, ...) and apply the following rule: if your number is
+    even, divide by two to get the next one. If it's odd, multiply by 3 and add 1 to get the next. The unproven conjecture
+    is that any number you start from will eventually end up at 1. For example if you start at 12
+    it goes 6, 3, 10, 5, 16, 8, 4, 2, 1. As far as anyone can tell it always goes to one. Actually if you keep going what
+    happens is you always end up in the loop 1, 4, 2, 1...
+
+    I decided to make a tool that let's you play with this rule. Use whatever integer values you want for dividing,
+    multiplying, and adding, and see what happens.
+    For example you might try multiplying by 2 instead of 3. You'll find that with this rule the numbers always blow up
+    and never converge to 1 or anything else. Or you might try the original problem but with -1 instead of 1. This leads to
+    ending up in many different loops
+
+    I heard about this problem from these Numberphile videos:
+    <a href="https://www.youtube.com/watch?v=5mFpVDpKX70">one</a>, and
+    <a href="https://www.youtube.com/watch?v=O2_h3z1YgEU"> two</a>. And here's
+    the <a href="https://xkcd.com/710/">obligatory xkcd</a>.
+
+</section>
+<section layout:fragment="custom-content-bottom">
+
+</section>
+</body>
+</html>

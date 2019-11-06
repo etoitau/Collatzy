@@ -4,6 +4,9 @@ import com.etoitau.collatzy.domain.CollatzConfig;
 
 import java.math.BigInteger;
 
+/**
+ * Object for determining next value in path if not yet known
+ */
 public class CollatzCalculator {
     private BigInteger d, m, p;
 

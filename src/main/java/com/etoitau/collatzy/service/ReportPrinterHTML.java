@@ -1,7 +1,6 @@
 package com.etoitau.collatzy.service;
 
 import com.etoitau.collatzy.domain.PathReport;
-import com.etoitau.collatzy.service.ReportPrinter;
 
 public class ReportPrinterHTML implements ReportPrinter {
     private PathReport rept;

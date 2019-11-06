@@ -16,13 +16,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
-import java.util.List;
 
 // to run: ./mvnw package && java -jar target/collatzy-0.0.1-SNAPSHOT.jar
 
 @Controller
 public class CollatzyController {
-    private ConfigCollection cc = new ConfigCollection();
     private Logger logger = LoggerFactory.getLogger(CollatzyController.class);
 
     private static final Integer DEFAULT_RUN_SIZE = 100;
@@ -38,8 +36,13 @@ public class CollatzyController {
         return new LayoutDialect();
     }
 
-    @GetMapping(value={"/", "/run"})
-    public String index(Model model) {
+    @GetMapping(value={"/", "/about"})
+    public String index() {
+        return "about";
+    }
+
+    @GetMapping(value={"/run"})
+    public String run(Model model) {
         logger.info("index or run called by Get");
         model.addAttribute("d", "2");
         model.addAttribute("m", "3");
@@ -107,7 +110,7 @@ public class CollatzyController {
         Integer p = Helper.parseStringToIntegerWithDefault(pStr, 1);
         CollatzConfig config = new CollatzConfig(d, m, p);
         ConfigEntry entry = dm.getEntry(config);
-        entry.setJsonNodes(msg);
+        entry.setSerialNodes(msg);
         repository.save(entry);
         return "saved";
     }
@@ -122,7 +125,7 @@ public class CollatzyController {
         Integer m = Helper.parseStringToIntegerWithDefault(mStr, 3);
         Integer p = Helper.parseStringToIntegerWithDefault(pStr, 1);
         ConfigEntry result = dm.getEntry(new CollatzConfig(d, m, p));
-        return result.getJsonNodes();
+        return result.getSerialNodes();
     }
 
     @ResponseBody

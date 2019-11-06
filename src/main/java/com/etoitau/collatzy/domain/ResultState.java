@@ -3,6 +3,9 @@ package com.etoitau.collatzy.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Object holds information about where a path will end up
+ */
 public class ResultState {
     public enum Result {
         OPEN,
@@ -25,7 +28,7 @@ public class ResultState {
         }
     }
 
-    public void addLoop(List<NodeWithResult> nodes) {
+    void addLoop(List<NodeWithResult> nodes) {
         loopNodes = nodes;
     }
 
@@ -37,7 +40,7 @@ public class ResultState {
         return loopNodes;
     }
 
-    public String toStringVerbose() {
+    String toStringVerbose() {
         switch (result) {
             case OPEN:
                 return "Unknown";
@@ -52,5 +55,18 @@ public class ResultState {
             default:
                 return "ERROR";
         }
+    }
+
+    @Override
+    public String toString() {
+        if (result != Result.LOOP) {
+            return Result.OPEN.toString();
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append(result);
+        for (NodeWithResult node: loopNodes) {
+            sb.append(" ").append(node.getValue().toString());
+        }
+        return sb.toString();
     }
 }

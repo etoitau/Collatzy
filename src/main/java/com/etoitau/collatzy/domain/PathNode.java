@@ -2,6 +2,11 @@ package com.etoitau.collatzy.domain;
 
 import java.math.BigInteger;
 
+/**
+ * The basic unit of information when exploring a Collatz configuration
+ * A node has a number value, the node that follows from it, it's associated configuration, and information about where
+ * a path from it will end up
+ */
 public class PathNode implements NodeWithResult {
     private BigInteger val;
     private NodeWithResult next;

@@ -7,6 +7,9 @@ import com.etoitau.collatzy.domain.ResultState;
 
 import java.math.BigInteger;
 
+/**
+ * Tool for building or combining nodes
+ */
 public class PathNodeBuilder {
     private NodeWithResult node;
 
@@ -34,14 +37,13 @@ public class PathNodeBuilder {
     }
 
     public PathNodeBuilder combineWith(NodeWithResult other) throws Exception {
-
-        if (!combineDeterminedPathNodes(node, other)) {
+        if (!combineNodesWithResult(node, other)) {
             throw new Exception("Nodes are not equal");
         }
         return this;
     }
 
-    public static boolean combineDeterminedPathNodes(NodeWithResult base, NodeWithResult addThis) {
+    public static boolean combineNodesWithResult(NodeWithResult base, NodeWithResult addThis) {
         // value, config
         if (!base.equals(addThis)) {
             return false;

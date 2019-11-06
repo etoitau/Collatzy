@@ -6,6 +6,10 @@ import com.etoitau.collatzy.domain.NumberMap;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Object for collecting NumberMaps
+ * Not currently used
+ */
 public class ConfigCollection implements NumberMapCollection {
     private Map<CollatzConfig, NumberMap> map = new HashMap<>();
 

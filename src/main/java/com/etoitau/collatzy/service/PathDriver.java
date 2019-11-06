@@ -7,6 +7,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Object for forging a NodePath and saving results
+ * Typical use would be to set up with a configuration to follow, and a NumberMap to which results are saved
+ * Then start a drive from a given point and call next to go to next point in path.
+ */
 public class PathDriver {
     private CollatzConfig config;
     private CollatzCalculator calc;
@@ -28,8 +33,12 @@ public class PathDriver {
         this.map = map;
     }
 
+    /**
+     * Set or reset driver to start exploring a path from the given start
+     * @param startNum - starting point
+     * @return - current node (starting point)
+     */
     public NodeWithResult startNewDrive(BigInteger startNum) {
-
         // check if already known
         if (map.contains(startNum)) {
             NodeWithResult found = map.get(startNum);
@@ -49,10 +58,17 @@ public class PathDriver {
         return start;
     }
 
+    /**
+     * @return - true if remainder of path is already explored
+     */
     public boolean hasResult() {
         return (result != null && result.getResult() != null &&result.getResult() == ResultState.Result.LOOP);
     }
 
+    /**
+     * Get next node in path and save new info to NumberMap
+     * @return - the next node
+     */
     public NodeWithResult next() {
         // get next node
         current.setNext(new PathNodeBuilder(calc.next(current.getValue())).addConfig(config).getNode());
@@ -82,6 +98,9 @@ public class PathDriver {
         return current;
     }
 
+    /**
+     * update result value for all nodes in path
+     */
     private void saveDrive() {
         List<NodeWithResult> loop = result.getLoopNodes();
         NodeWithResult cursor = start;

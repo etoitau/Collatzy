@@ -71,10 +71,10 @@ class PathNodeBuilderTest {
     void combineDeterminedPathNodes() {
         PathNodeBuilder pnb = new PathNodeBuilder(oneVal);
         NodeWithResult oneNode = pnb.getNode();
-        assertFalse(PathNodeBuilder.combineDeterminedPathNodes(oneNode, twoNode));
+        assertFalse(PathNodeBuilder.combineNodesWithResult(oneNode, twoNode));
         NodeWithResult oneNodePlus = new PathNodeBuilder(oneVal).addNext(twoNode).addResult(loop).getNode();
 
-        PathNodeBuilder.combineDeterminedPathNodes(oneNode, oneNodePlus);
+        PathNodeBuilder.combineNodesWithResult(oneNode, oneNodePlus);
 
         assertEquals(twoNode, oneNode.getNext());
         assertEquals(loop, oneNode.getResult());

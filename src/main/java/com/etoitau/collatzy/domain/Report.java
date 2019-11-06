@@ -4,8 +4,11 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Collects some information about an explored path
+ */
 public class Report implements PathReport {
-    private int divisor, multiplier, addend;
+
     private String startingPoint;
     private String result;
     private int length;
@@ -19,11 +22,6 @@ public class Report implements PathReport {
         length = nodeList.size();
 
         if (nodeList.get(0) == null) return;
-
-        CollatzConfig config = nodeList.get(0).getConfig();
-        divisor = config.getD();
-        multiplier = config.getM();
-        addend = config.getP();
 
         stringValueList = new ArrayList<>();
         for (BigInteger value: valueList) {

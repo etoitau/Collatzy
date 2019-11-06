@@ -1,23 +1,18 @@
 package com.etoitau.collatzy.persistence;
 
-import com.etoitau.collatzy.CollatzyController;
 import com.etoitau.collatzy.domain.CollatzConfig;
-import com.etoitau.collatzy.domain.NodeWithResult;
 import com.etoitau.collatzy.domain.NumberMap;
-import com.etoitau.collatzy.domain.PathNode;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
+/**
+ * Object for getting, processing, and saving entries in the configs database
+ */
 @Service
 public class DatabaseManager {
 
@@ -26,47 +21,48 @@ public class DatabaseManager {
     @Autowired
     private ConfigNodesRepository repository;
 
-    private Gson gson = new Gson();
 
-
-    public CollatzConfig getConfigFromEntry(ConfigEntry entry) {
+    private CollatzConfig getConfigFromEntry(ConfigEntry entry) {
         if (entry == null) { return null; }
         return new CollatzConfig(entry.getD(), entry.getM(), entry.getP());
     }
 
+    /**
+     * Deserialize NumberMap from entry
+     * @param entry - the database object
+     * @return - new NumberMap created from database object
+     */
     public NumberMap getMapFromEntry(ConfigEntry entry) {
         logger.info("getMapFromEntry called");
-        Type nodeListType = new TypeToken<ArrayList<PathNode>>(){}.getType();
-        NumberMap nm = new NumberMap(getConfigFromEntry(entry));
+        NumberMap nm = null;
         if (entry != null) {
-            ArrayList<PathNode> nodes = gson.fromJson(entry.getJsonNodes(), nodeListType);
-            if (nodes != null && !nodes.isEmpty()) {
-                for (NodeWithResult node: nodes) {
-                    nm.add(node);
-                }
-            }
+            nm = NumberMap.mapFromNodeString(getConfigFromEntry(entry), entry.getSerialNodes());
         }
         return nm;
     }
 
+    /**
+     * Update database information
+     * @param map - NumberMap with new information explored by user
+     * @return - NumberMap from database which has been updated with new information and saved
+     */
     @Transactional
     public NumberMap saveMap(NumberMap map) {
-        // get Entry corresponding
+        // get Entry from database corresponding to this map
         ConfigEntry entry = getEntry(map.getConfig());
-        // get current from database
+        // get version of map from database
         NumberMap fromDB = getMapFromEntry(entry);
-        // update with new values
+        // update with new values provided
         fromDB.addAll(map.getNodes());
         // save back to db
-        String jsonMap = gson.toJson(fromDB.getNodes());
-        entry.setJsonNodes(jsonMap);
+        String serialized = fromDB.nodesToString();
+        entry.setSerialNodes(serialized);
         repository.save(entry);
         return fromDB;
     }
 
     @Transactional
     public ConfigEntry getEntry(CollatzConfig config) {
-
         List<ConfigEntry> results = repository.findByDAndMAndP(config.getD(), config.getM(), config.getP());
         return (results.isEmpty())? new ConfigEntry(config): results.get(0);
     }
