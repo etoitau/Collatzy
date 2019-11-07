@@ -28,7 +28,7 @@ public class ConfigEntry implements Serializable {
     private int p;
 
     @Lob
-    @Column(name="nodes", columnDefinition = "CLOB")
+    @Column(name="nodes", columnDefinition = "TEXT")
     private String serialNodes;
 
     public ConfigEntry() {
@@ -98,5 +98,5 @@ public class ConfigEntry implements Serializable {
 //        d integer,
 //        m integer,
 //        p integer,
-//        serialNodes text
+//        nodes text
 //)
