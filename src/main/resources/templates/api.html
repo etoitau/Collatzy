@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{base}">
+<head>
+    <title>API</title>
+</head>
+<body>
+<section layout:fragment="custom-content-top">
+    This tool is also available as a RESTful service. Make a get request to /path and apply any of the following parameters:
+    <ul>
+        <li>num - The starting number. Defaults to 12.</li>
+        <li>d - The number to divide by when a multiple of d. Defaults to 2.</li>
+        <li>m - The number to multiply by when not multiple of d. Defaults to 3.</li>
+        <li>p - The number to add after multiplying by m. Defaults to 1.</li>
+        <li>report - specify "verbose" for readable report or "json" for json-formatted report. Defaults to verbose.</li>
+    </ul>
+    For example
+    <a class="text-dark" th:href="@{/path?num=12&d=2&m=3&p=1&report=verbose}">/path?num=12&d=2&m=3&p=1&report=verbose</a><br>
+    Each query is limited to exploring 100 new nodes. If part or all of the path has been previously explored the path
+    you get back could be much longer.
+
+
+</section>
+<section layout:fragment="custom-content-bottom">
+
+</section>
+</body>
+</html>

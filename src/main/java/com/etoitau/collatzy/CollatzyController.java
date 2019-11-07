@@ -41,13 +41,22 @@ public class CollatzyController {
         return "about";
     }
 
+    @GetMapping(value={"/api"})
+    public String api() {
+        return "api";
+    }
+
     @GetMapping(value={"/run"})
-    public String run(Model model) {
-        logger.info("index or run called by Get");
-        model.addAttribute("d", "2");
-        model.addAttribute("m", "3");
-        model.addAttribute("p", "1");
-        model.addAttribute("num", "12");
+    public String run(Model model,
+                      @RequestParam(value="num", defaultValue="12") String numString,
+                      @RequestParam(value="d", defaultValue = "2") String dStr,
+                      @RequestParam(value="m", defaultValue = "3") String mStr,
+                      @RequestParam(value="p", defaultValue = "1") String pStr) {
+        logger.info("run called by Get");
+        model.addAttribute("d", dStr);
+        model.addAttribute("m", mStr);
+        model.addAttribute("p", pStr);
+        model.addAttribute("num", numString);
         model.addAttribute("hasReport", false);
 
         model.addAttribute("runForm", new RunForm());
@@ -89,11 +98,10 @@ public class CollatzyController {
                                @RequestParam(value="d", defaultValue = "2") String dStr,
                                @RequestParam(value="m", defaultValue = "3") String mStr,
                                @RequestParam(value="p", defaultValue = "1") String pStr,
-                               @RequestParam(value="n", defaultValue = "100") String nStr,
                                @RequestParam(value="report", defaultValue = "verbose") String reportType) {
         logger.info(String.format("getReportFor called with num = %s, d = %s, m = %s, p = %s, and n = %s",
-                numString, dStr, mStr, pStr, nStr));
-        PathReport rept = getReportScript(numString, dStr, mStr, pStr, nStr, null);
+                numString, dStr, mStr, pStr, "100"));
+        PathReport rept = getReportScript(numString, dStr, mStr, pStr, "100", null);
         ReportPrinter printer = (reportType.equals("json"))? new ReportPrinterJson(rept): new ReportPrinterHTML(rept);
         return printer.print();
     }
@@ -190,12 +198,4 @@ public class CollatzyController {
         );
     }
 
-    private void syncWithDB(CollatzConfig config) {
-        // get serialized from db for config
-        // turn into list of nodes
-        // add all to numbermap
-        // get numbermap list of nodes
-        // serialize
-        // update to db
-    }
 }
