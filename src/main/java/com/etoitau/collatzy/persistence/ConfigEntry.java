@@ -92,3 +92,11 @@ public class ConfigEntry implements Serializable {
         this.serialNodes = serialNodes;
     }
 }
+
+//CREATE TABLE configs(
+//        id serial PRIMARY KEY,
+//        d integer,
+//        m integer,
+//        p integer,
+//        serialNodes text
+//)
