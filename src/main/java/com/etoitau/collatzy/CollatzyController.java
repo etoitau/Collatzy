@@ -107,23 +107,6 @@ public class CollatzyController {
     }
 
     @ResponseBody
-    @RequestMapping("/msg")
-    public String saveMessage(@RequestParam(value="msg", defaultValue="") String msg,
-                              @RequestParam(value="d", defaultValue = "2") String dStr,
-                              @RequestParam(value="m", defaultValue = "3") String mStr,
-                              @RequestParam(value="p", defaultValue = "1") String pStr) {
-        logger.info("msg called");
-        Integer d = Helper.parseStringToIntegerWithDefault(dStr, 2);
-        Integer m = Helper.parseStringToIntegerWithDefault(mStr, 3);
-        Integer p = Helper.parseStringToIntegerWithDefault(pStr, 1);
-        CollatzConfig config = new CollatzConfig(d, m, p);
-        ConfigEntry entry = dm.getEntry(config);
-        entry.setSerialNodes(msg);
-        repository.save(entry);
-        return "saved";
-    }
-
-    @ResponseBody
     @RequestMapping("/find")
     public String getEntry(@RequestParam(value="d", defaultValue = "2") String dStr,
                            @RequestParam(value="m", defaultValue = "3") String mStr,
@@ -136,18 +119,35 @@ public class CollatzyController {
         return result.getSerialNodes();
     }
 
-    @ResponseBody
-    @RequestMapping("/delete")
-    public String deleteEntry(@RequestParam(value="d", defaultValue = "2") String dStr,
-                           @RequestParam(value="m", defaultValue = "3") String mStr,
-                           @RequestParam(value="p", defaultValue = "1") String pStr) {
-        logger.info("deleteEntry called");
-        Integer d = Helper.parseStringToIntegerWithDefault(dStr, 2);
-        Integer m = Helper.parseStringToIntegerWithDefault(mStr, 3);
-        Integer p = Helper.parseStringToIntegerWithDefault(pStr, 1);
-        dm.delete(new CollatzConfig(d, m, p));
-        return "deleted";
-    }
+//    @ResponseBody
+//    @RequestMapping("/msg")
+//    public String saveMessage(@RequestParam(value="msg", defaultValue="") String msg,
+//                              @RequestParam(value="d", defaultValue = "2") String dStr,
+//                              @RequestParam(value="m", defaultValue = "3") String mStr,
+//                              @RequestParam(value="p", defaultValue = "1") String pStr) {
+//        logger.info("msg called");
+//        Integer d = Helper.parseStringToIntegerWithDefault(dStr, 2);
+//        Integer m = Helper.parseStringToIntegerWithDefault(mStr, 3);
+//        Integer p = Helper.parseStringToIntegerWithDefault(pStr, 1);
+//        CollatzConfig config = new CollatzConfig(d, m, p);
+//        ConfigEntry entry = dm.getEntry(config);
+//        entry.setSerialNodes(msg);
+//        repository.save(entry);
+//        return "saved";
+//    }
+
+//    @ResponseBody
+//    @RequestMapping("/delete")
+//    public String deleteEntry(@RequestParam(value="d", defaultValue = "2") String dStr,
+//                           @RequestParam(value="m", defaultValue = "3") String mStr,
+//                           @RequestParam(value="p", defaultValue = "1") String pStr) {
+//        logger.info("deleteEntry called");
+//        Integer d = Helper.parseStringToIntegerWithDefault(dStr, 2);
+//        Integer m = Helper.parseStringToIntegerWithDefault(mStr, 3);
+//        Integer p = Helper.parseStringToIntegerWithDefault(pStr, 1);
+//        dm.delete(new CollatzConfig(d, m, p));
+//        return "deleted";
+//    }
 
 
     private PathReport getReportScript(
