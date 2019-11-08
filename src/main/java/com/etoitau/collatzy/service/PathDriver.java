@@ -39,22 +39,22 @@ public class PathDriver {
      * @return - current node (starting point)
      */
     public NodeWithResult startNewDrive(BigInteger startNum) {
+
         // check if already known
         if (map.contains(startNum)) {
-            NodeWithResult found = map.get(startNum);
-            if (found.getResult().getResult() == ResultState.Result.LOOP) {
-                result = found.getResult();
-                return found;
-            }
+            start = map.get(startNum);
+            result = start.getResult();
+        } else {
+            start = new PathNodeBuilder(startNum).addConfig(config).getNode();
+            result = null;
+            map.add(start);
         }
 
         // initialize for drive
-        result = null;
-        start = new PathNodeBuilder(startNum).addConfig(config).getNode();
         current = start;
         traveled = new HashSet<>();
-        map.add(current);
         traveled.add(current);
+
         return start;
     }
 
@@ -62,7 +62,7 @@ public class PathDriver {
      * @return - true if remainder of path is already explored
      */
     public boolean hasResult() {
-        return (result != null && result.getResult() != null &&result.getResult() == ResultState.Result.LOOP);
+        return (result != null && result.getResult() != null && result.getResult() == ResultState.Result.LOOP);
     }
 
     /**

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{base}">
+<head>
+    <title>Error</title>
+</head>
+<body>
+<section layout:fragment="custom-content-top">
+    <h2 th:utext="${title}" />
+</section>
+<section layout:fragment="custom-content-bottom">
+    <h4 th:utext="${message}" />
+</section>
+</body>
+</html>

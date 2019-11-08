@@ -1,7 +1,6 @@
 package com.etoitau.collatzy;
 
 import com.etoitau.collatzy.domain.*;
-import com.etoitau.collatzy.persistence.ConfigCollection;
 import com.etoitau.collatzy.persistence.ConfigEntry;
 import com.etoitau.collatzy.persistence.ConfigNodesRepository;
 import com.etoitau.collatzy.persistence.DatabaseManager;
@@ -11,10 +10,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.http.HttpServletRequest;
 import java.math.BigInteger;
 
 // to run: ./mvnw package && java -jar target/collatzy-0.0.1-SNAPSHOT.jar
@@ -58,7 +60,6 @@ public class CollatzyController {
         model.addAttribute("p", pStr);
         model.addAttribute("num", numString);
         model.addAttribute("hasReport", false);
-
         model.addAttribute("runForm", new RunForm());
         return "run_number_form";
     }
@@ -66,6 +67,12 @@ public class CollatzyController {
     @PostMapping("/run")
     public String runSubmit(@ModelAttribute RunForm runForm, Model model) {
         logger.info("Run called by Post");
+        if (runForm.getD().equals("0") || runForm.getD().equals("-0")) {
+            model.addAttribute("title", "Error - 400");
+            model.addAttribute("message", "Can't divide by zero");
+            return "error";
+        }
+
         PathReport rept = getReportScript(runForm);
         model.addAttribute("d", runForm.getD());
         model.addAttribute("m", runForm.getM());
@@ -75,6 +82,8 @@ public class CollatzyController {
         model.addAttribute("hasReport", true);
         model.addAttribute("report", new ReportPrinterHTML(rept).print());
         model.addAttribute("isUnknown", rept.isUnknown());
+        model.addAttribute("runForm", new RunForm());
+        logger.info("sending back cont: " + rept.lastNum());
         return "run_number_form";
     }
 
@@ -88,7 +97,6 @@ public class CollatzyController {
      * @param dStr - the divisor, 2 in the classic case
      * @param mStr - the multiplier, 3 in the classic case
      * @param pStr - the addend, 1 in the classic case
-     * @param nStr - max number of many iterations to run, many problems do not converge
      * @param reportType - "json" for a json-formatted info dump, otherwise an html report
      * @return - the report as specified above
      */
@@ -166,19 +174,24 @@ public class CollatzyController {
         ConfigEntry entry = dm.getEntry(config);
         NumberMap map = dm.getMapFromEntry(entry);
 
-        PathDriver pd;
+        PathDriver pd = new PathDriver(config, map);
         if (contNum != null) {
-            pd = new PathDriver(config, map, contNum);
+            NodeWithResult nextNode = pd.startNewDrive(contNum);
+            for (int i = 0; i < n; i++) {
+                if (pd.hasResult()) break;
+                nextNode = pd.next();
+            }
+            logger.info("last node: " + nextNode.getValue().toString());
+        }
+
+        if (contNum == null || pd.hasResult()) {
+            pd.startNewDrive(startNum);
             for (int i = 0; i < n; i++) {
                 if (pd.hasResult()) break;
                 pd.next();
             }
         }
-        pd = new PathDriver(config, map, startNum);
-        for (int i = 0; i < n; i++) {
-            if (pd.hasResult()) break;
-            pd.next();
-        }
+
         dm.saveMap(map);
 
         NodeWithResult start = map.get(startNum);
@@ -197,5 +210,4 @@ public class CollatzyController {
                 runForm.getCont()
         );
     }
-
 }

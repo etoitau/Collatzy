@@ -14,10 +14,7 @@
             <label class="sr-only" for="d-input-field">d</label>
             <input type="text" class="form-control form-control-sm field-small"
                    id="d-input-field" name="d" th:value="${d}" />
-            &nbsp;when multiple of&nbsp;
-            <label class="sr-only" for="d-display-field">d</label>
-            <input readonly type="text" class="form-control form-control-sm field-small"
-                   id="d-display-field" th:placeholder="${d}" />
+            &nbsp;when multiple of&nbsp;it
         </div>
         <div class="form-group form-inline">
             Multiply by&nbsp;
@@ -55,7 +52,21 @@
                 </form>
             </div>
         </div>
-        <div th:utext="${report}" />
+        <div id="report" th:utext="${report}" />
+        <button type="button" class="btn btn-dark" onclick="location.href='#report'">Top of Path</button><br>
+        <div th:if="${isUnknown}">
+            <div class="form-group form-inline">
+                Result did not converge.&nbsp;
+                <form action="#" th:action="@{/run}" th:object="${runForm}" method="post">
+                    <input type="hidden" name="d" th:value="${d}" />
+                    <input type="hidden" name="m" th:value="${m}" />
+                    <input type="hidden" name="p" th:value="${p}" />
+                    <input type="hidden" name="num" th:value="${num}" />
+                    <input type="hidden" name="cont" th:value="${cont}" />
+                    <button type="submit" class="btn btn-dark">More!</button><br>
+                </form>
+            </div>
+        </div>
     </div>
 </section>
 </body>

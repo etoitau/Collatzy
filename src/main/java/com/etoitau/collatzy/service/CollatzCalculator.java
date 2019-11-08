@@ -17,7 +17,7 @@ public class CollatzCalculator {
     }
 
     public BigInteger next(BigInteger prev) {
-        if (prev.mod(d).equals(BigInteger.ZERO)) {
+        if (prev.remainder(d).equals(BigInteger.ZERO)) {
             return prev.divide(d);
         } else {
             return prev.multiply(m).add(p);
