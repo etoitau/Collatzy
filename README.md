@@ -2,7 +2,7 @@
 A web app for exploring variants of the Collatz Conjecture
 
 ## License
-Copyright 2019 [Kyle Chatman](http://www.kchatman.com)
+Copyright 2019-2020 [Kyle Chatman](http://www.kchatman.com)
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
